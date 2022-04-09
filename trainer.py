@@ -1,7 +1,8 @@
 from tensorflow import keras
 from tensorflow.keras import layers
 import tensorflow as tf
-import datetime
+from log_utils import LogUtils
+
 
 class Trainer:
     
@@ -12,7 +13,9 @@ class Trainer:
     def train(self):
         model = Trainer.__create_model()
         model.summary()
-        model.fit(self.train_dataset, epochs=7, validation_data=self.test_dataset)
+        log_utils = LogUtils()
+        tensorboard_callback = log_utils.get_tensorboard_callback()
+        model.fit(self.train_dataset, epochs=7, validation_data=self.test_dataset, callbacks=[tensorboard_callback])
         
         score = model.evaluate(self.test_dataset)
         print('Test score:', score[0])
@@ -32,6 +35,6 @@ class Trainer:
         
         model.compile(loss='categorical_crossentropy', 
                 optimizer='adam',  
-                metrics=['accuracy'])
+                metrics=['accuracy', 'Recall', 'Precision'])
         
         return model
