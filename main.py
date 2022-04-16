@@ -13,7 +13,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 def plot_cm(cm, filename):
     figure= plt.figure(figsize=(10, 7))
-    ax = sn.heatmap(cm, annot=True)
+    ax = sn.heatmap(cm, annot=True, fmt='d')
     ax.set_xlabel('predicted label')
     ax.set_ylabel('true label')
     plt.savefig(filename)
@@ -28,15 +28,13 @@ def main():
     y_label = DataUtil.get_ytest_labels()
     y_pred = trainer.predict(test_dataset)
     cm = confusion_matrix(y_label, y_pred)
-    cm = cm / np.sum(cm, axis=1, keepdims=True)
     
     plot_cm(cm, "before_train.png")
-
+    
     trainer.train()
     
     y_pred = trainer.predict(test_dataset)
     cm = confusion_matrix(y_label, y_pred)
-    cm = cm / np.sum(cm, axis=1, keepdims=True)
     
     plot_cm(cm, "after_train.png")
 
