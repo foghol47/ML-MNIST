@@ -1,40 +1,23 @@
 from tensorflow import keras
-from tensorflow.keras import layers
 import tensorflow as tf
+import numpy as np
 from log_utils import LogUtils
-
 
 class Trainer:
     
-    def __init__(self, train_dataset, test_dataset):
+    def __init__(self, train_dataset, test_dataset, model):
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
+        self.model = model
         
     def train(self):
-        model = Trainer.__create_model()
-        model.summary()
-        log_utils = LogUtils()
-        tensorboard_callback = log_utils.get_tensorboard_callback()
-        model.fit(self.train_dataset, epochs=7, validation_data=self.test_dataset, callbacks=[tensorboard_callback])
-        
-        score = model.evaluate(self.test_dataset)
-        print('Test score:', score[0])
-        print('Test accuracy:', score[1])
-    
-    @staticmethod    
-    def __create_model():
-        model = keras.Sequential(
-            [
-            layers.Conv2D(16, (3, 3), input_shape=(28, 28, 1), activation='relu', kernel_initializer='he_uniform'),
-            layers.MaxPooling2D((2, 2)),
-            layers.Flatten(),
-            layers.Dense(10, activation='relu'),
-            layers.Dense(10, activation='softmax')
-            ]
-        )
-        
-        model.compile(loss='categorical_crossentropy', 
-                optimizer='adam',  
-                metrics=['accuracy', 'Recall', 'Precision'])
-        
-        return model
+        self.model.summary()
+        tensorboard_callback = LogUtils.get_tensorboard_callback()
+        early_stopping_callback = keras.callbacks.EarlyStopping(monitor='val_loss', mode='min', patience=20)
+        self.model.fit(self.train_dataset, epochs=50, verbose=2, validation_data=self.test_dataset, callbacks=[tensorboard_callback, early_stopping_callback])
+        self.model.save('models\\model')
+
+    def predict(self, X):
+        y_pred = self.model.predict(X)
+        y_pred = np.argmax(y_pred, axis=1)
+        return y_pred
