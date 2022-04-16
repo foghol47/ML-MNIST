@@ -21,13 +21,8 @@ class DataUtil:
             x_test = x_test / 255
             x_train = x_train / 255
  
-        test_dataset = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(64)
+        test_dataset = tf.data.Dataset.from_tensor_slices((x_test, y_test)).shuffle(64).batch(64)
         train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)).shuffle(64).batch(64)
         
         return (train_dataset, test_dataset)
-    
-    @staticmethod
-    def get_ytest_labels():
-        y_test = idx2numpy.convert_from_file('Dataset/t10k-labels.idx1-ubyte')
-        return y_test
-            
+        
