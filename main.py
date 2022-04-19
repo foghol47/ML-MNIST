@@ -2,6 +2,8 @@ from utils.data_util import DataUtil
 from models.helpers.trainer import Trainer
 from utils.plot_util import PlotUtil
 import os
+import tensorflow as tf
+import numpy as np
 from models.model import Model
 from sklearn.metrics import confusion_matrix
 
@@ -15,7 +17,8 @@ def main():
     model = Model.create_model()
     trainer = Trainer(train_dataset, test_dataset, model)
     
-    y_label = DataUtil.get_ytest_labels()
+    y_label = tf.concat([y for x, y in test_dataset], axis=0).numpy()
+    y_label = np.argmax(y_label, axis=1)
     y_pred = trainer.predict(test_dataset)
     cm = confusion_matrix(y_label, y_pred)
     
