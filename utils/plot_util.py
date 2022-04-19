@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sn
+import os
 
 class PlotUtil():
     
@@ -9,4 +10,8 @@ class PlotUtil():
         ax = sn.heatmap(cm, annot=True, fmt='d')
         ax.set_xlabel('predicted label')
         ax.set_ylabel('true label')
-        plt.savefig(filename)
+        
+        path = os.getcwd() + '//pics//'
+        if not os.path.exists(path):
+            os.makedirs(path)
+        plt.savefig(path + filename)

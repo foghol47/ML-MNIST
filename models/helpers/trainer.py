@@ -1,7 +1,7 @@
 from tensorflow import keras
 import tensorflow as tf
 import numpy as np
-from log_utils import LogUtils
+from utils.log_utils import LogUtils
 
 class Trainer:
     
@@ -15,7 +15,7 @@ class Trainer:
         tensorboard_callback = LogUtils.get_tensorboard_callback()
         early_stopping_callback = keras.callbacks.EarlyStopping(monitor='val_loss', mode='min', patience=20)
         self.model.fit(self.train_dataset, epochs=50, verbose=2, validation_data=self.test_dataset, callbacks=[tensorboard_callback, early_stopping_callback])
-        self.model.save('models\\model')
+        self.model.save('saved_models\\model')
 
     def predict(self, X):
         y_pred = self.model.predict(X)

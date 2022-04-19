@@ -1,8 +1,8 @@
-from data_util import DataUtil
-from trainer import Trainer
-from plot_util import PlotUtil
+from utils.data_util import DataUtil
+from models.helpers.trainer import Trainer
+from utils.plot_util import PlotUtil
 import os
-from model import Model
+from models.model import Model
 from sklearn.metrics import confusion_matrix
 
 
