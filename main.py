@@ -1,22 +1,12 @@
 from data_util import DataUtil
 from trainer import Trainer
-import seaborn as sn
-import matplotlib.pyplot as plt
+from plot_util import PlotUtil
 import os
-import tensorflow as tf
 from model import Model
 from sklearn.metrics import confusion_matrix
-import numpy as np
-from tensorflow import keras
+
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-
-def plot_cm(cm, filename):
-    figure= plt.figure(figsize=(10, 7))
-    ax = sn.heatmap(cm, annot=True, fmt='d')
-    ax.set_xlabel('predicted label')
-    ax.set_ylabel('true label')
-    plt.savefig(filename)
 
 
 def main():
@@ -29,14 +19,14 @@ def main():
     y_pred = trainer.predict(test_dataset)
     cm = confusion_matrix(y_label, y_pred)
     
-    plot_cm(cm, "before_train.png")
+    PlotUtil.plot_cm(cm, "before_train.png")
     
     trainer.train()
     
     y_pred = trainer.predict(test_dataset)
     cm = confusion_matrix(y_label, y_pred)
     
-    plot_cm(cm, "after_train.png")
+    PlotUtil.plot_cm(cm, "after_train.png")
 
 
 if __name__ == '__main__':
